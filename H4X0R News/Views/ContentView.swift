@@ -20,7 +20,7 @@ struct ContentView: View {
                     }
                 }
             }
-            .navigationBarTitle("Formula 1 News")
+            .navigationBarTitle("F1 News")
         }
         .onAppear {
             self.networkManager.fetchData()
