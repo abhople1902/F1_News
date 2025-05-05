@@ -13,14 +13,50 @@ struct ContentView: View {
     
     var body: some View {
         NavigationView {
-            List(networkManager.posts) { post in
-                NavigationLink(destination: DetailView(url: post.link)) {
-                    HStack {
-                        Text(post.title)
+            ZStack {
+                // Main List
+                List(networkManager.posts) { post in
+                    NavigationLink(destination: DetailView(url: post.link)) {
+                        VStack(alignment: .leading, spacing: 8) {
+                            // Use AsyncImage for remote URLs
+                            AsyncImage(url: URL(string: post.image_url)) { phase in
+                                if let image = phase.image {
+                                    image
+                                        .resizable()
+                                        .scaledToFill()
+                                        .frame(maxWidth: .infinity, minHeight: 150, maxHeight: 200)
+                                        .clipped()
+                                } else if phase.error != nil {
+                                    // Error placeholder
+                                    Color.red
+                                        .frame(height: 150)
+                                } else {
+                                    // Loading placeholder
+                                    ProgressView()
+                                        .frame(height: 150)
+                                }
+                            }
+                            .background(Color(.systemGray6))
+
+                            Text(post.title)
+                                .font(.headline)
+                        }
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .listRowInsets(EdgeInsets())
                     }
                 }
+                .navigationBarTitle("F1 News")
+
+                // Overlay ProgressView while loading
+                if networkManager.posts.isEmpty {
+                    VStack {
+                        ProgressView("Loading Articles...")
+                            .progressViewStyle(CircularProgressViewStyle())
+                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .background(Color(.systemBackground).opacity(0.6))
+                }
             }
-            .navigationBarTitle("F1 News")
         }
         .onAppear {
             self.networkManager.fetchData()
@@ -33,4 +69,3 @@ struct ContentView_Previews: PreviewProvider {
         ContentView()
     }
 }
-

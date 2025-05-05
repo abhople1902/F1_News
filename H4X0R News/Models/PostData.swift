@@ -19,4 +19,5 @@ struct Post: Decodable, Identifiable {
     let source_priority: Int
     let title: String
     let link: String?
+    let image_url: String
 }

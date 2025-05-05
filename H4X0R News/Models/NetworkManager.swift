@@ -12,7 +12,7 @@ class NetworkManager: ObservableObject {
     @Published var posts = [Post]()
     
     func fetchData() {
-        if let url = URL(string: "https://newsdata.io/api/1/news?apikey=pub_276905e63783667c89744c31c243ef30d05cc&q=Formula%201&language=en&category=sports") {
+        if let url = URL(string: "https://newsdata.io/api/1/news?apikey=pub_276905e63783667c89744c31c243ef30d05cc&q=Formula%201&language=en&category=sports&image=1") {
             let session = URLSession(configuration: .default)
             let task = session.dataTask(with: url) { (data, respose, error) in
                 if (error == nil) {
